@@ -1,0 +1,19 @@
+/**
+ * Created by msidolphin on 2018/3/28.
+ */
+
+//查询参数
+const GET_QUERY_PARAMS = "GET_QUERY_PARAMS"
+const SET_QUERY_PARAMS = "SET_QUERY_PARAMS"
+
+const SET_REDIRECT = "SET_REDIRECT"
+const GET_REDIRECT = "GET_REDIRECT"
+
+const SET_USER = 'SET_USER'
+const GET_USER = 'GET_USER'
+
+export default {
+  GET_QUERY_PARAMS, SET_QUERY_PARAMS,
+  SET_REDIRECT, GET_REDIRECT,
+  SET_USER, GET_USER
+}
