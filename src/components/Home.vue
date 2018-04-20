@@ -71,16 +71,7 @@
     components: {SideBar},
     name: 'home',
     created(){
-      bus.$on('setNickName', (text) => {
-        this.nickname = text;
-      })
-
-      bus.$on('goto', (url) => {
-        if (url === "/login") {
-          localStorage.removeItem('access-user');
-        }
-        this.$router.push(url);
-      })
+     
     },
     data () {
       return {

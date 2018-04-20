@@ -5,7 +5,6 @@
         <span>{{ routes.name }}</span>
       </template>
       <template  v-for="subItem in routes.children" >
-        <!--<el-menu-item index="1-1">选项1</el-menu-item>-->
         <el-menu-item :index="subItem.path" v-if="!subItem.children || subItem.children.length === 0 || subItem.leaf">{{ subItem.name }}</el-menu-item>
         <sub-menu :routes="subItem" v-else/>
       </template>

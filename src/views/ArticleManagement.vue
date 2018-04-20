@@ -135,12 +135,13 @@
             if (summary.length >= 200) summary = summary.concat('...')
           }
           this.summary = summary
-
+		  let thumbnail
           //处理缩略图uri问题
-          let matcher = this.thumbnail.match(/(\w+):\/\/([^\:|\/]+)(\:\d*)?(.*\/.*)?/i)
-          let thumbnail
-          if(matcher && matcher[4] && matcher[4].length > 1) thumbnail = matcher[4].substring(1)
-
+		  if(this.thumbnail) {
+			  let matcher = this.thumbnail.match(/(\w+):\/\/([^\:|\/]+)(\:\d*)?(.*\/.*)?/i)
+			  if(matcher && matcher[4] && matcher[4].length > 1) thumbnail = matcher[4].substring(1)
+		  }
+		  
           var article = {
             type: this.articleType,
             title: this.articleTitle,
@@ -151,7 +152,7 @@
             content: this.content
           }
           if(this.id) {
-            article.id = this.id
+            article.articleId = this.id
           }
           var params = {
             article: JSON.stringify(article),
@@ -160,9 +161,12 @@
           }
           this.$http.$request("/admin/articles", "post", params).then(response => {
             //设置文章id
-            this.id = response.data.data.id
+            this.id = response.data.data.articleId
+			
             this.saveBtnText = '保存'
+	
             tips('保存成功', 'success')
+			
           }).catch(error => {
             tips('保存失败', 'error')
           })
@@ -211,7 +215,7 @@
         },
         //图片上传相关
         uploadSuccess(res, file) {
-          this.thumbnail = res.message
+          this.thumbnail = res.data
         },
         beforeThumbnailUpload(file) {
           const isJpg = file.type === 'image/jpeg'
@@ -226,41 +230,49 @@
             return false
           }
           return true
-        }
-      },
-      mounted() {
-        this.id = this.$route.params.id
-        if(this.id) {
-          this.$http.$request("/admin/articles/" + this.id, "get").then(response => {
-            console.log(response)
-            const data = response.data.data
-            if(data) {
-              this.content = data.content
-              this.articleTitle = data.title
-              if(data.tags) {
-                let names = data.tags.split(",")
-                let ids   = data.tagsId.split(",")
-                for(let i = 0 ; i < names.length ; ++i) {
-                  this.tags[i] = {name: names[i], id: ids[i]}
-                }
-              }else {
-                this.tags = []
-              }
-              //important
-              this.originTags = data.tags
-              this.originTagsId = data.tagsId
-              this.articleType = data.type
-              this.thumbnail = data.thumbnail
-              this.summary = data.summary
-              this.saveBtnText = '保存'
-              this.isEdit = true
+        },
+		initData() {
+			console.log(this.id)
+			if(!this.id) {
+				this.id = this.$route.params.id
+			}
+			if(this.id) {
+			  this.$http.$request("/admin/articles/" + this.id, "get").then(response => {
+				const data = response.data.data
+				if(data) {
+				  this.content = data.content
+				  this.articleTitle = data.title
+				  if(data.tags) {
+					let names = data.tags.split(",")
+					let ids   = data.tagsId.split(",")
+					for(let i = 0 ; i < names.length ; ++i) {
+					  this.tags[i] = {name: names[i], id: ids[i]}
+					}
+				  }else {
+					this.tags = []
+				  }
+				  //important
+				  this.originTags = data.tags
+				  this.originTagsId = data.tagsId
+				  this.articleType = data.type
+				  this.thumbnail = data.thumbnail
+				  this.summary = data.summary
+				  this.saveBtnText = '保存'
+				  this.isEdit = true
 
-            }
-          }).catch(error => {
-            //未找到相关资源，导航到文章新增
-            this.$router.push({ path: '/blog/articles'})
-          })
-        }
+				}
+			  }).catch(error => {
+				//未找到相关资源，导航到文章新增
+				this.$router.push({ path: '/blog/articles'})
+			  })
+			}
+		}
+      },
+	  'watch': {
+		"id": "initData"
+	  },
+      mounted() {
+        this.initData()
       }
     }
 </script>
