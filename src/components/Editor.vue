@@ -28,7 +28,7 @@
     watch: {
       value: function (val) {
         //判断是否为初始化，初始化设置一次文本内容
-        if (this.status == INIT && tinymce.activeEditor){
+        if (tinymce.activeEditor && (this.status == INIT || !val)) {
           tinymce.activeEditor.setContent(val);
         }
         this.status = CHANGED

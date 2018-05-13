@@ -2,7 +2,7 @@
 <style lang="scss" scoped>
   .panel-wrapper {
     padding: 25px 25px;
-    width: 400px;
+    width: 340px;
     height: 100px;
     position: relative;
     border-radius: 10px;
