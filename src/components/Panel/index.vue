@@ -44,7 +44,7 @@
       <i :class="icon"></i>
     </div>
     <div class="panel-content">
-      <div class="panel-data">{{ value }}</div>
+      <div class="panel-data"><slot></slot></div>
       <div class="panel-title">{{  title }}</div>
     </div>
   </div>
@@ -53,9 +53,6 @@
 <script>
   export default {
     props: {
-      value: {
-        default: 0
-      },
       title: {
         default: 'Panel'
       },

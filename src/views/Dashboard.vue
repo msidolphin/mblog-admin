@@ -10,16 +10,24 @@
       <div class="container">
         <div class="panel-group">
           <div class="panel-item">
-            <panel :type="{background: '#6a8abe',boxShadow: '0 5px 0 #5f7cab'}" icon="iconfont my-icon-wenjian" title="文章" :value="articleCount"/>
+            <panel :type="{background: '#6a8abe',boxShadow: '0 5px 0 #5f7cab'}" icon="iconfont my-icon-wenjian" title="文章">
+              <count-up :start-val="0" :end-val="articleCount" :precision="0"/>
+            </panel>
           </div>
           <div class="panel-item">
-            <panel :type="{background: '#fc8675',boxShadow: '0 5px 0 #e27869'}" icon="iconfont my-icon-biaoqian" title="标签" :value="tagCount"/>
+            <panel :type="{background: '#fc8675',boxShadow: '0 5px 0 #e27869'}" icon="iconfont my-icon-biaoqian" title="标签">
+              <count-up :start-val="0" :end-val="tagCount" :precision="0"/>
+            </panel>
           </div>
           <div class="panel-item">
-            <panel :type="{background: '#5ab6df',boxShadow: '0 5px 0 #51a3c8'}" icon="iconfont my-icon-wode" title="用户" :value="userCount"/>
+            <panel :type="{background: '#5ab6df',boxShadow: '0 5px 0 #51a3c8'}" icon="iconfont my-icon-wode" title="用户">
+              <count-up :start-val="0" :end-val="userCount" :precision="0"/>
+            </panel>
           </div>
           <div class="panel-item">
-            <panel :type="{background: '#4acacb',boxShadow: '0 5px 0 #42b5b6'}" icon="iconfont my-icon-pinglun" title="评论" :value="commentCount"/>
+            <panel :type="{background: '#4acacb',boxShadow: '0 5px 0 #42b5b6'}" icon="iconfont my-icon-pinglun" title="评论">
+              <count-up :start-val="0" :end-val="commentCount" :precision="0"/>
+            </panel>
           </div>
         </div>
         <div class="charts-wrapper">
@@ -67,9 +75,12 @@
   import TodoList from '@/components/TodoList'
   import api from '@/api'
   import {tips, extend} from '@/utils/utils'
+  import CountUp from "../components/countUp";
 
   export default {
-    components: {GithubCorner, Panel, TodoList},
+    components: {
+      CountUp,
+      GithubCorner, Panel, TodoList},
     data() {
       return {
         currentDate: new Date(),
