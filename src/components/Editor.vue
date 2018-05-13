@@ -54,7 +54,7 @@
         //初始化回调
         init_instance_callback: editor => {
           EDITOR = editor;
-          console.log("Editor: " + editor.id + " is now initialized.");
+          // console.log("Editor: " + editor.id + " is now initialized.");
           //监听编辑器内容改变事件
           editor.on('input change undo redo', () => {
             //获取文本内容

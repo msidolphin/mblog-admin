@@ -117,9 +117,7 @@
           this.total = response.data.data.total
           this.pageSize = response.data.data.pageSize
           this.loading = false
-        }).catch(error => {
-          console.log(error)
-        })
+        }).catch(error => {})
       },
       switchChange(type, id, status) {
         /*

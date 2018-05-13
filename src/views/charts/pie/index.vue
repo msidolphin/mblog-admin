@@ -42,7 +42,6 @@
           this.charts.setOption(this.option)
           this.charts.hideLoading()
         }).catch(error => {
-          console.log(error)
           tips('获取统计数据失败', 'error')
           this.charts.hideLoading()
         })

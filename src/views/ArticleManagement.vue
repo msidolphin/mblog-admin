@@ -297,7 +297,6 @@ export default {
   watch: {
     id: "initData",
     '$route.path': function () {
-      //console.log(this.$route.path)
       if (this.$route.path === '/blog/articles') this.initialize()
     }
   },

@@ -61,7 +61,6 @@
             extend(this.option, this.defaultOption)
             this.option.xAxis = this.option.xaxis
             this.option.yAxis = this.option.yaxis
-            console.log(this.option)
             this.charts.setOption(this.option)
             this.charts.hideLoading()
           }).catch(error => {

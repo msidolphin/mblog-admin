@@ -147,7 +147,7 @@
             api.logicDeleteArticle(id).then(response => {
               this.getData(this.pageNum)
             }).catch(error => {
-              console.error(error)
+
             })
           }
         }

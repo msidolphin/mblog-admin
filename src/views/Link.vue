@@ -166,7 +166,6 @@
         this.subTitle = '新增'
       },
       deleteLink(id) {
-        console.log(id)
         if(id) {
           api.deleteLink(id).then(response => {
             this.getData(this.pageNum)

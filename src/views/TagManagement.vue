@@ -106,14 +106,11 @@
             id    : this.id,
             name  : this.currentName
           }).then(response => {
-            console.log(response)
             //重新渲染页面
             this.data[this.index].name = this.currentName
 
             tips('保存成功', 'success')
-          }).catch(error => {
-            console.log(error)
-          })
+          }).catch(error => {})
         }else if(!this.id) {
 
         }else if(!this.currentName){
