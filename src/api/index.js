@@ -135,6 +135,9 @@ const api = {
   fetchArtcilePieReport() {
     return Axios.$request('/articles/reports/pie', 'get')
   },
+  fetchHottestArticleReport() {
+    return Axios.$request('/articles/reports/hot', 'get')
+  },
   //获取仪表盘内容
   fetchDashboard() {
     return Axios.$request('/dashboard', 'get')

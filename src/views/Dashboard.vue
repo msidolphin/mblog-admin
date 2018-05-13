@@ -107,13 +107,13 @@
           this.userCount = data.userCount
           let titleText = data.echartsData['dashboard-bar'].title.text
           this.initPublishECharts(option, titleText)
-          this.initHottestArtcilesCharts(hottestData)
+          this.initHottestArticlesCharts(hottestData)
         }).catch(()=>{
           tips("获取数据失败", 'error')
           this.publishCharts.hideLoading()
         })
       },
-      initHottestArtcilesCharts(data) {
+      initHottestArticlesCharts(data) {
         if (!data) {
           this.hotCharts.hideLoading()
           return

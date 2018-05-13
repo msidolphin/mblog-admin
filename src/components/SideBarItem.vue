@@ -3,7 +3,7 @@
     background-color="rgba(238,238,238,0.98)"
     text-color="#333"
     active-text-color="#148cf1"
-    :default-active="path($route.path)"
+    :default-active="activePath"
     router :collapse="collapse" >
     <template v-for="item in routes">
       <!-- 注意：index是url -->
@@ -28,14 +28,17 @@ export default {
       collapse: false
     }
   },
-  methods: {
-    path (path) {
+  computed: {
+    activePath () {
+      console.log(this.$route.path)
+      debugger
       // 解决编辑文章侧栏不会高亮的bug
-      if ((path && path.indexOf('/blog/articles/list')) || window.location.href.indexOf('/blog/articles/list')) return path
-      else if ((path && path.indexOf('/blog/articles')) || window.location.href.indexOf('/blog/articles')) {
+      if ((this.$route.path && this.$route.path.indexOf('/blog/articles/list') !== -1) || window.location.href.indexOf('/blog/articles/list') !== -1) {
+        return this.$route.path
+      } else if ((this.$route.path && this.$route.path.indexOf('/blog/articles') !== -1) && window.location.href.indexOf('/blog/articles') !== -1) {
         return '/blog/articles'
       }
-      return path
+      return this.$route.path
     }
   }
 }

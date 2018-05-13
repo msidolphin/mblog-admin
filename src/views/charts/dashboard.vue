@@ -6,7 +6,7 @@
 				<bar/>
 			</div>
 			<div class="item two" @click="clickChart(2)" style="transform: translate(-22.4%,0.5%) scale(0.33)">
-				<div id="main2" style="width: 100%; height: 100%;"></div>
+				<div id="hotArticle" style="width: 100%; height: 100%;"></div>
 			</div>
 			<div class="item three" @click="clickChart(3)" style="transform: translate(-22.4%,34.5%) scale(0.33)">
 				<pie/>
@@ -23,14 +23,17 @@
   import LineCharts from './line'
 	import Pie      from './pie'
   import Bar      from './bar'
+  import api from '@/api'
 	export default {
 		components: {Pie, LineCharts, Bar},
 		data() {
 			return {
-				items: []
+				items: [],
+        hoiCharts: null
 			}
 		},
 		mounted() {
+      this.hotCharts = echarts.init(document.querySelector("#hotArticle"))
 			this.init()
 			this.initBar()
 		},
@@ -41,238 +44,121 @@
 					this.items[i].dataset.order = i + 1
 				}
 			},
+      initHottestArticlesCharts(data) {
+        if (!data) {
+          this.hotCharts.hideLoading()
+          return
+        }
+        var colors = ['#5793f3', '#d14a61', '#675bba'];
+        var option = {
+          color: colors,
+          title: {
+            text: '热门文章'
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {type: 'cross'}
+          },
+          grid: {
+            right: '20%'
+          },
+          toolbox: {
+            feature: {
+              // dataView: {show: true, readOnly: false},
+              // restore: {show: true},
+              // saveAsImage: {show: true}
+            }
+          },
+          legend: {
+            data:['点赞数','阅览数','评论数']
+          },
+          xAxis: [
+            {
+              type: 'category',
+              axisTick: {
+                alignWithLabel: true
+              },
+              data: data.titles
+            }
+          ],
+          yAxis: [
+            {
+              type: 'value',
+              name: '点赞数',
+              min: 0,
+              minInterval: 1,
+              position: 'right',
+              axisLine: {
+                lineStyle: {
+                  color: colors[0]
+                }
+              },
+              axisLabel: {
+                formatter: '{value}'
+              }
+            },
+            {
+              type: 'value',
+              name: '评论数',
+              min: 0,
+              minInterval: 1,
+              position: 'right',
+              offset: 80,
+              axisLine: {
+                lineStyle: {
+                  color: colors[1]
+                }
+              },
+              axisLabel: {
+                formatter: '{value}'
+              }
+            },
+            {
+              type: 'value',
+              name: '阅览数',
+              min: 0,
+              minInterval: 1,
+              position: 'left',
+              axisLine: {
+                lineStyle: {
+                  color: colors[2]
+                }
+              },
+              axisLabel: {
+                formatter: '{value}'
+              }
+            }
+          ],
+          series: [
+            {
+              name:'点赞数',
+              type:'bar',
+              data: data.votes
+            },
+            {
+              name:'评论数',
+              type:'bar',
+              yAxisIndex: 1,
+              data: data.replies
+            },
+            {
+              name:'阅览数',
+              type:'line',
+              yAxisIndex: 2,
+              data: data.views
+            }
+          ]
+        };
+        this.hotCharts.setOption(option)
+        this.hotCharts.hideLoading()
+      },
 			initBar() {
-				var read = {
-				    '1959': 1,
-				    '1985': 1,
-				    '1986': 2,
-				    '1990': 2,
-				    '1991': 2,
-				    '1992': 2,
-				    '1994': 1,
-				    '1995': 1,
-				    '1996': 3,
-				    '1997': 5,
-				    '1999': 5,
-				    '2000': 4,
-				    '2001': 4,
-				    '2002': 9,
-				    '2003': 6,
-				    '2004': 13,
-				    '2005': 15,
-				    '2006': 15,
-				    '2007': 24,
-				    '2008': 29,
-				    '2009': 35,
-				    '2010': 49,
-				    '2011': 50,
-				    '2012': 33,
-				    '2013': 29,
-				    '2014': 30,
-				    '2015': 17,
-				    '2016': 2
-				};
-				var wish = {
-				    '1981': 2,
-				    '1986': 2,
-				    '1989': 2,
-				    '1992': 1,
-				    '1994': 1,
-				    '1997': 1,
-				    '1999': 2,
-				    '2000': 2,
-				    '2001': 2,
-				    '2002': 4,
-				    '2003': 8,
-				    '2004': 6,
-				    '2005': 9,
-				    '2006': 12,
-				    '2007': 12,
-				    '2008': 11,
-				    '2009': 10,
-				    '2010': 15,
-				    '2011': 15,
-				    '2012': 15,
-				    '2013': 13,
-				    '2014': 20,
-				    '2015': 28,
-				    '2016': 17
-				};
-				var readThisYear = {
-				    '1991': 1,
-				    '2001': 1,
-				    '2005': 1,
-				    '2008': 2,
-				    '2009': 2,
-				    '2010': 1,
-				    '2011': 7,
-				    '2012': 6,
-				    '2013': 4,
-				    '2014': 8,
-				    '2015': 9,
-				    '2016': 2
-				}
-				var startYear = 1980
-
-				var color = ['#22C3AA', '#D0648A']
-				var option = {
-				    title: {
-				        text: '羡辙感兴趣的书的出版年份'
-				    },
-				    color: color,
-				    xAxis: {
-				        data: (function() {
-				            var d = [];
-				            for (var i = startYear; i < 2017; ++i) {
-				                d.push(i);
-				            }
-				            return d;
-				        })(),
-				        axisLine: {
-				            lineStyle: {
-				                color: '#888'
-				            }
-				        }
-				    },
-				    yAxis: [{
-				        axisLine: {
-				            lineStyle: {
-				                color: '#888'
-				            }
-				        }
-				    }],
-				    series: [{
-				        type: 'bar',
-				        name: '读过',
-				        data: (function() {
-				            var d = [];
-				            for (var i = startYear; i < 2017; ++i) {
-				                var all = read[i] || 0;
-				                var thisYear = readThisYear[i] || 0;
-				                d.push(all - thisYear || '-');
-				            }
-				            return d;
-				        })(),
-				        markPoint: {
-				            data: [{
-				                type: 'max'
-				            }]
-				        },
-				        stack: 'read',
-				        zlevel: 2
-				    }, {
-				        type: 'bar',
-				        name: '想读',
-				        data: (function() {
-				            var d = [];
-				            for (var i = startYear; i < 2017; ++i) {
-				                d.push(wish[i] || 0);
-				            }
-				            return d;
-				        })(),
-				        markPoint: {
-				            data: [{
-				                type: 'max'
-				            }]
-				        },
-				        zlevel: 2
-				    }, {
-				        type: 'line',
-				        name: '读过',
-				        data: (function() {
-				            var d = [];
-				            for (var i = startYear; i < 2017; ++i) {
-				                d.push(read[i] || '-');
-				            }
-				            return d;
-				        })(),
-				        markPoint: {
-				            data: [{
-				                type: 'max'
-				            }]
-				        },
-				        areaStyle: {
-				            normal: {
-				                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-				                    offset: 1,
-				                    color: 'rgba(255, 255, 255, 0.1)'
-				                }, {
-				                    offset: 0.2,
-				                    color: 'rgba(34, 195, 170, 0.4)'
-				                }], false)
-				            }
-				        },
-				        lineStyle: {
-				            normal: {
-				                color: 'transparent'
-				            }
-				        },
-				        symbolSize: 0
-				    }, {
-				        type: 'line',
-				        name: '想读',
-				        data: (function() {
-				            var d = [];
-				            for (var i = startYear; i < 2017; ++i) {
-				                d.push(wish[i] || 0);
-				            }
-				            return d;
-				        })(),
-				        markPoint: {
-				            data: [{
-				                type: 'max'
-				            }]
-				        },
-				        areaStyle: {
-				            normal: {
-				                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-				                    offset: 1,
-				                    color: 'rgba(255, 255, 255, 0.2)' // 0% 处的颜色
-				                }, {
-				                    offset: 0,
-				                    color: color[1] // 100% 处的颜色
-				                }], false)
-				            }
-				        },
-				        lineStyle: {
-				            normal: {
-				                color: 'transparent'
-				            }
-				        },
-				        symbolSize: 0
-				    }, {
-				        type: 'bar',
-				        name: '今年读过',
-				        data: (function() {
-				            var d = [];
-				            for (var i = startYear; i < 2017; ++i) {
-				                d.push(readThisYear[i] || '-');
-				            }
-				            return d;
-				        })(),
-				        stack: 'read',
-				        zlevel: 2,
-				        itemStyle: {
-				            normal: {
-				                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-				                    offset: 0.8,
-				                    color: '#219886' // 0% 处的颜色
-				                }, {
-				                    offset: 1,
-				                    color: color[0] // 100% 处的颜色
-				                }], false)
-				            }
-				        }
-				    }],
-				    tooltip: {},
-				    legend: {
-				        data: ['读过', '今年读过', '想读'],
-				        bottom: 10
-				    }
-				};
-				var mycharts = echarts.init(document.querySelector("#main2"))
-				mycharts.setOption(option)
-
+        api.fetchHottestArticleReport().then(response => {
+          if (response.data && response.data.data) this.initHottestArticlesCharts(response.data.data)
+          else this.hotCharts.hideLoading()
+        }).catch(() => {
+          this.hotCharts.hideLoading()
+        })
 			},
 			clickChart(index) {
 				let activeItem = document.querySelector(".flex-container .active")
