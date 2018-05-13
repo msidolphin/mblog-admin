@@ -96,22 +96,28 @@
     methods: {
       getData() {
         this.publishCharts.showLoading()
+        this.hotCharts.showLoading()
         api.fetchDashboard().then(response => {
           let data = response.data.data
           let option = data.echartsData['dashboard-bar'].option
+          let hottestData = data.echartsData['hottestArticles']
           this.commentCount = data.commentCount
           this.articleCount = data.articleCount
           this.tagCount = data.tagCount
           this.userCount = data.userCount
           let titleText = data.echartsData['dashboard-bar'].title.text
           this.initPublishECharts(option, titleText)
+          this.initHottestArtcilesCharts(hottestData)
         }).catch(()=>{
           tips("获取数据失败", 'error')
           this.publishCharts.hideLoading()
         })
       },
-      initCharts() {
-        this.hotCharts  = echarts.init(document.querySelector("#hotArticle"))
+      initHottestArtcilesCharts(data) {
+        if (!data) {
+          this.hotCharts.hideLoading()
+          return
+        }
         var colors = ['#5793f3', '#d14a61', '#675bba'];
         var option = {
           color: colors,
@@ -125,9 +131,9 @@
           },
           toolbox: {
             feature: {
-              dataView: {show: true, readOnly: false},
-              restore: {show: true},
-              saveAsImage: {show: true}
+              // dataView: {show: true, readOnly: false},
+              // restore: {show: true},
+              // saveAsImage: {show: true}
             }
           },
           legend: {
@@ -139,16 +145,15 @@
               axisTick: {
                 alignWithLabel: true
               },
-              data: ['测试文章1','测试文章2','测试文章3','测试文章4','测试文章5','测试文章6','测试文章7','测试文章8',
-                '测试文章9','测试文章10']
+              data: data.titles
             }
           ],
           yAxis: [
             {
               type: 'value',
-              name: '评论数',
+              name: '点赞数',
               min: 0,
-              max: 250,
+              minInterval: 1,
               position: 'right',
               axisLine: {
                 lineStyle: {
@@ -161,9 +166,9 @@
             },
             {
               type: 'value',
-              name: '点赞数',
+              name: '评论数',
               min: 0,
-              max: 250,
+              minInterval: 1,
               position: 'right',
               offset: 80,
               axisLine: {
@@ -179,7 +184,7 @@
               type: 'value',
               name: '阅览数',
               min: 0,
-              max: 1000,
+              minInterval: 1,
               position: 'left',
               axisLine: {
                 lineStyle: {
@@ -195,91 +200,24 @@
             {
               name:'点赞数',
               type:'bar',
-              data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0]
+              data: data.votes
             },
             {
               name:'评论数',
               type:'bar',
               yAxisIndex: 1,
-              data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8]
+              data: data.replies
             },
             {
               name:'阅览数',
               type:'line',
               yAxisIndex: 2,
-              data:[524, 421, 210, 987, 457, 786, 697, 888, 358, 127]
+              data: data.views
             }
           ]
         };
         this.hotCharts.setOption(option)
-      },
-      initPublishCharts() {
-        this.publishCharts = echarts.init(document.querySelector("#publishCharts"))
-        var option = {
-          title: {
-            text: '2018年文章发布情况统计图',
-          },
-          backgroundColor:'#ffffff',
-          tooltip : {
-            trigger: 'axis',
-            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-              type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-            }
-          },
-          legend: {
-            data: ['原创','转载', '翻译']
-          },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-          },
-          xAxis:  {
-            type: 'value'
-          },
-          yAxis: {
-            name: '月份',
-            type: 'category',
-            data: ['一',
-              '二',
-              '三',
-              '四',
-              '五',
-              '六',
-              '七',
-              '八',
-              '九',
-              '十',
-              '十一',
-              '十二']
-          },
-          series: [
-            {
-              name: '原创',
-              type: 'bar',
-              stack: '数量',
-              itemStyle:{normal:{color:'#333399'}},
-              data: [492, 831, 731, 389, 738, 849, 822,712,732,754,934,1002]
-            },
-            {
-              name: '转载',
-              type: 'bar',
-              stack: '数量',
-              itemStyle:{normal:{color:'#6699ff'}},
-              data: [40,50,51,61 ,62,66 ,67, 70 , 70, 72, 82, 94]
-            },
-            {
-              name: '翻译',
-              type: 'bar',
-              stack: '数量',
-              itemStyle:{normal:{color:'#993333'}},
-              data: [219,221,230, 234,239,248,251, 261, 268, 271 , 288,300]
-            }
-          ]
-        };
-        this.publishCharts.setOption(option)
-        this.publishCharts.hideLoading()
+        this.hotCharts.hideLoading()
       },
       initPublishECharts(option, title) {
         option.xAxis = option.xaxis
@@ -289,7 +227,6 @@
           "转载": '#6699ff',
           '翻译': '#993333'
         }
-
         //设置颜色
         option.series.forEach((item)=> {
           item.itemStyle = {
@@ -314,11 +251,9 @@
       }
     },
     mounted: function () {
-      // this.barCharts = echarts.init(document.querySelector("#dashboard-bar-charts"));
       this.publishCharts = echarts.init(document.querySelector("#publishCharts"))
+      this.hotCharts = echarts.init(document.querySelector("#hotArticle"))
       this.getData()
-      this.initCharts()
-      //this.initPublishCharts()
     }
   }
 </script>
