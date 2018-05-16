@@ -61,7 +61,7 @@
       methods: {
         handleAvatarSuccess(res, file) {
           //改变vuex中的头像缓存
-          this.$store.dispatch(types.SET_USER, {...this.user, avatar: res.message})
+          this.$store.dispatch(types.SET_USER, {...this.user, avatar: res.data})
         },
         beforeAvatarUpload(file) {
           const isJPG = file.type === 'image/jpeg';

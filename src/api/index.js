@@ -121,7 +121,6 @@ const api = {
   },
   saveUser(payload) {
     if(!payload.id) return null
-    console.log(payload)
     return Axios.$request('/users/' + payload.id, 'post', payload)
   },
 

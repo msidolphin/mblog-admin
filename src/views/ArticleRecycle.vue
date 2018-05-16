@@ -140,9 +140,10 @@
       recover(id) {
         if(id) {
           api.recoverArticle(id).then(() => {
+            tips('文章已成功恢复', 'success')
             this.getData(this.pageNum)
           }).catch(error => {
-            tips('文章已成功恢复', 'success')
+            tips('恢复失败', 'error')
           })
         }
       },

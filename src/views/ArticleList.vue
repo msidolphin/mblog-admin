@@ -145,6 +145,7 @@
         deleteArticle(id) {
           if(id) {
             api.logicDeleteArticle(id).then(response => {
+              tips('删除成功', 'success')
               this.getData(this.pageNum)
             }).catch(error => {
 
