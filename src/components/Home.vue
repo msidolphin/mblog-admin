@@ -25,9 +25,11 @@
             <el-dropdown-item>
               <div @click="jumpTo('/settings/profile')"><span style="color: #555;font-size: 14px;">个人信息</span></div>
             </el-dropdown-item>
+			<!--
             <el-dropdown-item>
               <div @click="jumpTo('/settings/profile')"><span style="color: #555;font-size: 14px;">修改密码</span></div>
             </el-dropdown-item>
+			-->
             <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>

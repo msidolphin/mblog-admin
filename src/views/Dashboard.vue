@@ -11,7 +11,7 @@
         <div class="panel-group">
           <div class="panel-item">
             <panel :type="{background: '#6a8abe',boxShadow: '0 5px 0 #5f7cab'}" icon="iconfont my-icon-wenjian" title="文章">
-              <count-up :start-val="0" :end-val="articleCount" :precision="0"/>
+              <count-up  :start-val="0" :end-val="articleCount" :precision="0"/>
             </panel>
           </div>
           <div class="panel-item">
@@ -253,7 +253,9 @@
     mounted: function () {
       this.publishCharts = echarts.init(document.querySelector("#publishCharts"))
       this.hotCharts = echarts.init(document.querySelector("#hotArticle"))
-      this.getData()
+      this.$nextTick(() => {
+        this.getData()
+      })
     }
   }
 </script>

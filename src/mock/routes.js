@@ -66,7 +66,7 @@ const routes =  [
       {path: '/settings/system', id:Random.guid(), name: '系统设置', menuShow: true},
       {path: '/settings/link', id:Random.guid(), name: '友情链接', menuShow: true},
       {path: '/settings/profile', id:Random.guid(), name: '个人信息', menuShow: true},
-      {path: '/settings/changepwd',id:Random.guid(), name: '修改密码', menuShow: true},
+      // {path: '/settings/changepwd',id:Random.guid(), name: '修改密码', menuShow: true},
     ]
   }
 ]

@@ -30,10 +30,10 @@ export default {
   },
   computed: {
     activePath () {
-      console.log(this.$route.path)
-      debugger
       // 解决编辑文章侧栏不会高亮的bug
       if ((this.$route.path && this.$route.path.indexOf('/blog/articles/list') !== -1) || window.location.href.indexOf('/blog/articles/list') !== -1) {
+        return this.$route.path
+      } else if ((this.$route.path && this.$route.path.indexOf('/blog/articles/recycle') !== -1) && window.location.href.indexOf('/blog/articles/recycle') !== -1) {
         return this.$route.path
       } else if ((this.$route.path && this.$route.path.indexOf('/blog/articles') !== -1) && window.location.href.indexOf('/blog/articles') !== -1) {
         return '/blog/articles'

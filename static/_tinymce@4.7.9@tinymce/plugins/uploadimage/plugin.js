@@ -30,7 +30,7 @@ tinymce.PluginManager.add('uploadimage', function (editor) {
             // data.file_path.forEach(function (src) {
             //   console.log(data)
             //将图片写入到编辑器
-            editor.selection.setContent(dom.createHTML('img', {src: data.message}));
+            editor.selection.setContent(dom.createHTML('img', {src: data.data}));
             // })
           }
         }
