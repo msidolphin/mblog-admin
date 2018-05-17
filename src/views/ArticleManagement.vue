@@ -107,6 +107,13 @@ export default {
       this.text = text
     },
     publish() {
+      let loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)',
+        target: document.querySelector('body')
+      })
       //校验
       if(!validate(this.articleType, 'required')) {
         tips('请选择文章类型', 'error')
@@ -165,10 +172,12 @@ export default {
         this.id = response.data.data.articleId
 
         this.saveBtnText = '保存'
-
+        loading.close()
         tips('保存成功', 'success')
 
+
       }).catch(error => {
+        loading.close()
         tips('保存失败', 'error')
       })
     },

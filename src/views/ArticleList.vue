@@ -144,11 +144,20 @@
         //删除文章
         deleteArticle(id) {
           if(id) {
+            let loading = this.$loading({
+              lock: true,
+              text: 'Loading',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0, 0, 0, 0.7)',
+              target: document.querySelector('body')
+            })
             api.logicDeleteArticle(id).then(response => {
+              loading.close()
               tips('删除成功', 'success')
               this.getData(this.pageNum)
             }).catch(error => {
-
+              loading.close()
+              tips('删除失败', 'error')
             })
           }
         }

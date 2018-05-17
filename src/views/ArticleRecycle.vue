@@ -139,10 +139,19 @@
       },
       recover(id) {
         if(id) {
+          let loading = this.$loading({
+              lock: true,
+              text: 'Loading',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0, 0, 0, 0.7)',
+              target: document.querySelector('body')
+            })
           api.recoverArticle(id).then(() => {
+            loading.close()
             tips('文章已成功恢复', 'success')
             this.getData(this.pageNum)
           }).catch(error => {
+            loading.close()
             tips('恢复失败', 'error')
           })
         }
@@ -150,10 +159,19 @@
       //删除文章
       deleteArticle(id) {
         if(id) {
+          let loading = this.$loading({
+              lock: true,
+              text: 'Loading',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0, 0, 0, 0.7)',
+              target: document.querySelector('body')
+            })
           api.physicalDeleteArticle(id).then(() => {
+            loading.close()
             tips('文章删除成功', 'success')
             this.getData(this.pageNum)
           }).catch(error => {
+            loading.close()
             tips('文章删除失败', 'error')
           })
         }
